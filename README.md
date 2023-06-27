@@ -5,6 +5,9 @@ When we are working on big projects we would use console log for debugging right
 
 Improving Plugin For better good
 
+### 0.0.8
+Added for TSX file
+
 ### 0.0.7
 Added Comment and Uncomment Console Log
 
