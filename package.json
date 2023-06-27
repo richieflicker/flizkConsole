@@ -1,0 +1,69 @@
+{
+  "name": "flizkconsole",
+  "displayName": "flizkConsole",
+  "description": "",
+  "version": "0.0.8",
+  "pricing": "Free",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "publisher": "richieflicker",
+  "categories": [
+    "Keymaps"
+  ],
+  "activationEvents": [
+    "onCommand:flizkConsole.displayLogMessage",
+    "onCommand:flizkConsole.commentLogMessage",
+    "onCommand:flizkConsole.uncommentLogMessage"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "command": "runCommands",
+    "commands": [{
+      "command": "displayLogMessage",
+      "title": "Display Log Message"
+      },{
+        "command": "commentLogMessage",
+        "title": "Comment Log Message"
+        },{
+          "command": "uncommentLogMessage",
+          "title": "Uncomment Log Message"
+          }],
+    "keybindings": [
+      {
+        "when": "editorTextFocus",
+      "command": "flizkConsole.displayLogMessage",
+        "key": "ctrl+alt+l",
+        "mac": "ctrl+alt+l"
+      },
+      {
+        "when": "editorTextFocus",
+        "command": "flizkConsole.commentLogMessage",
+        "key": "ctrl+alt+c",
+        "mac": "ctrl+alt+c"
+      },
+      {
+        "when": "editorTextFocus",
+        "command": "flizkConsole.uncommentLogMessage",
+        "key": "ctrl+alt+z",
+        "mac": "ctrl+alt+z"
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "node ./test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.75.0",
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "eslint": "^8.36.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "typescript": "^4.9.5",
+    "@vscode/test-electron": "^2.3.0"
+  }
+}

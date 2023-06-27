@@ -1,0 +1,80 @@
+[
+	{
+	  "key": "ctrl+alt+l",
+	  "command": "runCommands",
+	  "when":"editorLangId == javascript||editorLangId == typescript",
+	  "args": {
+		"commands": [
+		  {
+			"command": "runCommands",
+			"args": {
+			  "commands": [
+				"editor.action.clipboardCopyAction",
+				"editor.action.insertLineAfter"
+			  ]
+			}
+		  },
+		  {
+			"command": "editor.action.insertSnippet",
+			"when": "editorTextFocus",
+			"args": {
+			  "langId": "javascript",
+			  "snippet": "console.log(':${TM_LINE_INDEX} ${CLIPBOARD} '+ ${CLIPBOARD} $1)$2;"
+			}
+		  }
+		]
+	  }
+	},
+	{
+	  "key": "ctrl+alt+l",
+	  "command": "runCommands",
+	  "when":"editorLangId == php",
+	  "args": {
+		"commands": [
+		  {
+			"command": "runCommands",
+			"args": {
+			  "commands": [
+				"editor.action.clipboardCopyAction",
+				"editor.action.insertLineAfter"
+			  ]
+			}
+		  },
+		  {
+			"command": "editor.action.insertSnippet",
+			"when": "editorTextFocus",
+			"args": {
+			  "langId": "php",
+			  "snippet": "Log::info(':${TM_LINE_INDEX} ${CLIPBOARD} '.${CLIPBOARD} $1)$2;"
+			}
+		  }
+		]
+	  }
+	},
+	{
+	  "key": "ctrl+alt+e",
+	  "command": "runCommands",
+	  "when":"editorLangId == php",
+	  "args": {
+		"commands": [
+		  {
+			"command": "runCommands",
+			"args": {
+			  "commands": [
+				"editor.action.clipboardCopyAction",
+				"editor.action.insertLineAfter"
+			  ]
+			}
+		  },
+		  {
+			"command": "editor.action.insertSnippet",
+			"when": "editorTextFocus",
+			"args": {
+			  "langId": "php",
+			  "snippet": "echo ':${TM_LINE_INDEX} ${CLIPBOARD}  ',${CLIPBOARD} $1;"
+			}
+		  }
+		]
+	  }
+	}
+  ]
