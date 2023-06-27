@@ -1,6 +1,6 @@
 License Agreement for Open Source Plugin
 
-This license agreement fliZkConsole is between the author of the software richieFlicker and any person or entity using the software.
+This license agreement flizkConsole is between the author of the software richieFlicker and any person or entity using the software.
 
 Grant of License
 Author hereby grants to User a non-exclusive, non-transferable license to use, copy, modify, and distribute the software in source code form, and to use the software for any purpose, commercial or non-commercial.
