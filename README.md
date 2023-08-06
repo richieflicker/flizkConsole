@@ -1,35 +1,48 @@
-# Last Console You Needed for your all projects (flizkConsole)
-When we are working on big projects we would use console log for debugging right so over the period of time we will loss track of our console log it would be difficult for us to track that right i have made an plugin to track of our console log.
+# flizkConsole - Your Ultimate Console Log Management Tool
 
-## Release Notes
+![flizkConsole Banner](./images/flizk_banner.jpg)
 
-Improving Plugin For better good
+## Overview
 
-### 0.0.8
-Added for TSX file
+Do you find yourself lost in a labyrinth of `console.log` statements while debugging your colossal projects? We've all been there! The more we rely on these logs, the harder it gets to keep track of them. Say hello to flizkConsole, your new debugging sidekick designed to restore order to your codebase chaos.
 
-### 0.0.7
-Added Comment and Uncomment Console Log
+## Features at a Glance
 
-### 0.0.6
-Updated Key Binidings
+- **Seamless Debugging**: Effortlessly manage and organize your `console.log` statements for crystal-clear code understanding.
 
-### 0.0.5
+- **Stay Updated with Releases**:
+  - **0.0.9**:
+    - Test out our shiny new feature that allows you to remove console logs from JavaScript files (Note: Visual removal only) - **ON BETA**.
+    - Enhanced Console Comment and Uncomment functionality.
+  
+  - **0.0.8**:
+    - Say hello to support for TSX files – your versatile teammate.
 
-Made a pretty much everything i like to add on this extension soon adding new feautures like deleting the console log in near feauture
+  - **0.0.7**:
+    - Experience the magic of commenting and uncommenting console log statements with ease.
 
----
+  - **0.0.6**:
+    - We've jazzed up key bindings for an even smoother workflow.
 
-## Working with Markdown
+  - **0.0.5**:
+    - Our initial release, packed with essentials.
+    - Keep your seatbelts fastened for upcoming features, including console log deletion.
 
-Here are some useful editor keyboard shortcuts for console log:
+## Installation
 
-* ctrl+alt+l - It will Declare Console for js/ts/php(Laravel)
-* ctrl+alt+c - To Comment Console log
-* ctrl+alt+z - Uncomment Comment Console log
+Want to embark on your flizkConsole journey? Simply visit the [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=flizk.flizk-console) and hit the install button. You're just a click away from smarter debugging.
 
-## Need Help or Any Querries 
+## How to Use
 
-* [Richie Flicker](https://www.linkedin.com/in/richie-flicker-879828139/)
+flizkConsole comes with a handy collection of keyboard shortcuts, elevating your debugging prowess:
 
-**Enjoy!**
+- **ctrl+alt+l**: Declare Console for JavaScript, TypeScript, TSX, and PHP (Laravel) files.
+- **ctrl+alt+c**: Comment your selected `console.log` statement.
+- **ctrl+alt+z**: Unleash the power of uncommenting a previously commented `console.log` statement.
+- **ctrl+alt+d**: Swiftly remove comments from your JavaScript, TypeScript, or TSX files.
+
+## Need Assistance?
+
+Questions or suggestions? Feel free to get in touch with [Richie Flicker](https://www.linkedin.com/in/richie-flicker-879828139/) on LinkedIn.
+
+**Experience seamless debugging with flizkConsole. Happy coding!**

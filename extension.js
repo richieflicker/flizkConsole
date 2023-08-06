@@ -38,18 +38,17 @@ function activate(context) {
 		let language = editor.document.languageId;
 		// console.log(`The current document's language is ${language}`);
 		if (language == "typescript" || language == "typescriptreact" || language == "javascript") {
+			console.log('lineText :31 ', editor.document.getText );
 			consoleLog()
-			vscode.window.showInformationMessage('Added Log from flizkConsole! ', selectedText);
+			// vscode.window.showInformationMessage('Added Log from flizkConsole! ', selectedText);
 
 		} else if (language == "php") {
 			consoleLogPhp()
-			vscode.window.showInformationMessage('Added Log from flizkConsole! ', selectedText);
+			// vscode.window.showInformationMessage('Added Log from flizkConsole! ', selectedText);
 
 		} else {
 			vscode.window.showWarningMessage('Have not added log ! ');
 		}
-		// Display a message box to the user
-
 	});
 	vscode.commands.registerCommand('flizkConsole.commentLogMessage', function () {
 		// The code you place here will be executed every time your command is executed
@@ -59,13 +58,18 @@ function activate(context) {
 		if (language == "typescript" || language == "typescriptreact" || language == "javascript") {
 			commentConsoleLog()
 		} else if (language == "php") {
-
+ 
 		}else {
 			vscode.window.showWarningMessage('There is Nothing to Comment ! ');
 		}
-		// Display a message box to the user
-
 	});
+	vscode.commands.registerCommand('flizkConsole.removeLogMessage', function () {
+		const editor = vscode.window.activeTextEditor;
+		let language = editor.document.languageId;
+		if (language == "typescript" || language == "typescriptreact" || language == "javascript") {
+			commentConsoleLog(true)
+		}
+	})
 	vscode.commands.registerCommand('flizkConsole.uncommentLogMessage', function () {
 		// The code you place here will be executed every time your command is executed
 		const editor = vscode.window.activeTextEditor;
@@ -83,72 +87,86 @@ function activate(context) {
 		// Display a message box to the user
 
 	});
-	function uncommentConsoleLog(){
+	function uncommentConsoleLog() {
 		let editor = vscode.window.activeTextEditor;
-		const textEditor = vscode.window.activeTextEditor;
-		if (!textEditor) {
+	
+		if (!editor) {
 			vscode.window.showErrorMessage("Editor Does Not Exist");
 			return;
 		}
-		const regex = /\b^[//console]\b/gm;
-
-		let textReplace = [];
-		let invalidRange = new vscode.Range(0, 0, editor.document.lineCount, 0);
-		let validFullRange = editor.document.validateRange(invalidRange);
-		let doc = vscode.window.activeTextEditor.document;
-
-		editor.edit(editBuilder => {
-		for(var i=0;i<doc.lineCount;i++)
-		{
-			var line = doc.lineAt(i);
-			var getText=[]
-			line.text.split(' ').forEach(function(i){
-				if(regex.test(i)){
-				getText.push("//"+i)
-				}else{
-					getText.push(i)
-				}
-			})
-			textReplace.push(getText.join(" "))
-
+	
+		const regex = /\/\/\s*console\.log\(([^)]*)\);|\/\*\s*console\.log\(([^)]*)\);\s*\*\/|#\s*console\.log\(([^)]*)\);/g;
+		const visibleRange = editor.visibleRanges[0]; // Get the visible range of the editor
+	
+		// Create an array to hold the edited lines
+		let editedLines = [];
+	
+		for (let i = visibleRange.start.line; i <= visibleRange.end.line; i++) {
+			let line = editor.document.lineAt(i);
+			let newText = line.text;
+	
+			// Check if the line is commented and contains a commented console.log statement
+			if ((newText.trim().startsWith("//") || newText.trim().startsWith("/*") || newText.trim().startsWith("#")) && regex.test(newText)) {
+				newText = newText.replace(regex, "console.log($1$2$3);"); // Uncomment the console.log statement
+			}
+	
+			editedLines.push(newText);
 		}
-			editBuilder.replace(validFullRange, textReplace.join("\n"));
-			vscode.window.showInformationMessage('Commented console.log from flizkConsole! ') 
-		}).catch(err => console.log(err));
+	
+		// Apply the changes to the visible lines of the document
+		editor.edit(editBuilder => {
+			for (let i = visibleRange.start.line; i <= visibleRange.end.line; i++) {
+				editBuilder.replace(editor.document.lineAt(i).range, editedLines[i - visibleRange.start.line]);
+			}
+		}).then(() => {
+			vscode.window.showInformationMessage('Uncommented console.log statements in visible text.');
+		}).catch(err => {
+			console.error(err);
+		});
 	}
-	function commentConsoleLog() {
+	function commentConsoleLog(removeLogs=false) {
 		let editor = vscode.window.activeTextEditor;
-		const textEditor = vscode.window.activeTextEditor;
-		if (!textEditor) {
+	
+		if (!editor) {
 			vscode.window.showErrorMessage("Editor Does Not Exist");
 			return;
 		}
-		const regex = /\b^console\b/gm;
-
-		let textReplace = [];
-		let invalidRange = new vscode.Range(0, 0, editor.document.lineCount, 0);
-		let validFullRange = editor.document.validateRange(invalidRange);
-		let doc = vscode.window.activeTextEditor.document;
-
-		editor.edit(editBuilder => {
-		for(var i=0;i<doc.lineCount;i++)
-		{
-			var line = doc.lineAt(i);
-			var getText=[]
-			line.text.split(' ').forEach(function(i){
-				if(regex.test(i)){
-				getText.push("//"+i)
-				}else{
-					getText.push(i)
-				}
-			})
-			textReplace.push(getText.join(" "))
-
+	
+		const regex = /console\.log\(([^)]*)\);/g; // Updated regex to capture everything inside the parentheses
+		const visibleRange = editor.visibleRanges[0]; // Get the visible range of the editor
+	
+		// Create an array to hold the edited lines
+		let editedLines = [];
+	
+		for (let i = visibleRange.start.line; i <= visibleRange.end.line; i++) {
+			let line = editor.document.lineAt(i);
+			let newText = line.text;
+			let conditons,setNew
+			// Check if the line is not already commented and contains a console.log statement
+			if (!removeLogs) {
+				conditons=regex.test(newText) && !newText.trim().startsWith("//");
+				setNew=newText.replace(regex, "// console.log($1);");
+			}else{
+				conditons=regex.test(newText)
+				setNew=newText.replace(regex, "")
+			}
+			if (conditons) {
+				console.log(removeLogs,"Logs")
+				newText = setNew; // Comment out the console.log statement
+			}
+			editedLines.push(newText);
 		}
-			editBuilder.replace(validFullRange, textReplace.join("\n"));
-			vscode.window.showInformationMessage('Commented console.log from flizkConsole! ') 
-		}).catch(err => console.log(err));
-		
+	
+		// Apply the changes to the visible lines of the document
+		editor.edit(editBuilder => {
+			for (let i = visibleRange.start.line; i <= visibleRange.end.line; i++) {
+				editBuilder.replace(editor.document.lineAt(i).range, editedLines[i - visibleRange.start.line]);
+			}
+		}).then(() => {
+			vscode.window.showInformationMessage('Commented console.log statements in visible text.');
+		}).catch(err => {
+			console.error(err);
+		});
 	}
 	function consoleLog() {
 		vscode.commands.executeCommand("editor.action.insertLineAfter");
