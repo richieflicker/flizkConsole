@@ -2,8 +2,10 @@
   "name": "flizkconsole",
   "displayName": "flizkConsole",
   "description": "",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "pricing": "Free",
+  "icon": "images/flizk.jpg",
+  "repository": "https://github.com/richieflicker/flizkConsole", 
   "engines": {
     "vscode": "^1.75.0"
   },
@@ -14,7 +16,8 @@
   "activationEvents": [
     "onCommand:flizkConsole.displayLogMessage",
     "onCommand:flizkConsole.commentLogMessage",
-    "onCommand:flizkConsole.uncommentLogMessage"
+    "onCommand:flizkConsole.uncommentLogMessage",
+    "onCommand:flizkConsole.removeLogMessage"
   ],
   "main": "./extension.js",
   "contributes": {
@@ -28,7 +31,10 @@
         },{
           "command": "uncommentLogMessage",
           "title": "Uncomment Log Message"
-          }],
+        },{
+          "command": "removeLogMessage",
+          "title": "Remove Log Message"
+        }],
     "keybindings": [
       {
         "when": "editorTextFocus",
@@ -47,6 +53,12 @@
         "command": "flizkConsole.uncommentLogMessage",
         "key": "ctrl+alt+z",
         "mac": "ctrl+alt+z"
+      },
+      {
+        "when": "editorTextFocus",
+        "command": "flizkConsole.removeLogMessage",
+        "key": "ctrl+alt+d",
+        "mac": "ctrl+alt+d"
       }
     ]
   },
