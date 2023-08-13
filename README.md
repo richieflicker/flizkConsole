@@ -1,6 +1,6 @@
 # flizkConsole - Your Ultimate Console Log Management Tool
 
-![flizkConsole Banner](images/flizk_banner.jpg)
+![flizkConsole Banner](https://ibb.co/c22qWvK)
 
 ## Overview
 
