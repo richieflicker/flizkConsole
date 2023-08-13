@@ -11,9 +11,9 @@ Do you find yourself lost in a labyrinth of `console.log` statements while debug
 - **Seamless Debugging**: Effortlessly manage and organize your `console.log` statements for crystal-clear code understanding.
 
 - **Stay Updated with Releases**:
-  - **0.1.4**:
+  - **0.1.6**:
     - Enhanced Console Future.
-    
+
   - **0.0.9**:
     - Test out our shiny new feature that allows you to remove console logs from JavaScript files (Note: Visual removal only) - **ON BETA**.
     - Enhanced Console Comment and Uncomment functionality.

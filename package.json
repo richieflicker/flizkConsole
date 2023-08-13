@@ -1,11 +1,14 @@
 {
   "name": "flizkconsole",
-  "displayName": "flizkConsole",
-  "description": "",
-  "version": "0.1.",
+  "displayName": "Enhance Debugging Efficiency with flizkConsole - Visual Studio Code Extension",
+  "description": "Simplify your debugging process and regain code clarity with flizkConsole, a powerful Visual Studio Code extension. Easily manage, organize, and optimize console.log statements in JavaScript, TypeScript, and TSX files. Unlock streamlined debugging with intuitive keyboard shortcuts and stay up-to-date with enhanced features. Try flizkConsole today for smarter, more efficient development.",
+  "version": "0.1.8",
   "pricing": "Free",
   "icon": "images/flizk.png",
-  "repository": "https://github.com/richieflicker/flizkConsole", 
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/richieflicker/flizkConsole.git"
+  },
   "engines": {
     "vscode": "^1.75.0"
   },

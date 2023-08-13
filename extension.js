@@ -125,25 +125,25 @@ function activate(context) {
 	}
 	function commentConsoleLog(removeLogs = false) {
 		let editor = vscode.window.activeTextEditor;
-	
+
 		if (!editor) {
 			vscode.window.showErrorMessage("Editor Does Not Exist");
 			return;
 		}
-	
+
 		let regex = /(?<!\/\/\s*)\bconsole\s*\.\s*log\(([^)]*)\);?/g; // Updated regex to capture everything inside the parentheses
 		if (removeLogs) {
 			regex = /(\/\/)?\s*console(\s*\.\s*log)?\(([^)]*)\);?/g;
 		}
 		const visibleRange = editor.visibleRanges[0]; // Get the visible range of the editor
-	
+
 		// Create an array to hold the edited lines
 		let editedLines = [];
-	
+
 		for (let i = visibleRange.start.line; i <= visibleRange.end.line; i++) {
 			let line = editor.document.lineAt(i);
 			let newText = line.text;
-	
+
 			// Check if the line is not already commented and contains a console.log statement
 			if (!removeLogs) {
 				const matches = newText.match(regex);
@@ -158,14 +158,14 @@ function activate(context) {
 				// Remove the entire console.log statement including possible trailing );
 				if (matches && !newText.trim().startsWith("//")) {
 					newText = newText.replace(regex, "").replace(/\);?/g, "");
-				}else if(newText.trim().startsWith("//")){
+				} else if (newText.trim().startsWith("//")) {
 					newText = newText.replace(regex, "").replace(/\);?/g, "");
 				}
 			}
-	
+
 			editedLines.push(newText);
 		}
-	
+
 		// Apply the changes to the visible lines of the document
 		editor.edit(editBuilder => {
 			for (let i = visibleRange.start.line; i <= visibleRange.end.line; i++) {
@@ -177,8 +177,8 @@ function activate(context) {
 			console.error(err);
 		});
 	}
-	
-	
+
+
 	function consoleLog() {
 		const editor = vscode.window.activeTextEditor;
 
@@ -194,69 +194,77 @@ function activate(context) {
 
 		const selection = editor.selection;
 		const selectedText = document.getText(selection);
-		if(selectedText){
-			console.log(selectedText,'Text')
+		if (selectedText) {
+			console.log(selectedText, 'Text')
 			// Find the end of the current function block
-				const variableName = selectedText || 'variableName'; // Use selected text as variable name or provide a default name
-				const snippet = `console.log('${variableName} :${currentLine}', ${variableName});\n`;
-				const insertionPosition = new vscode.Position(currentLine + 1, 0);
+			const variableName = selectedText || 'variableName'; // Use selected text as variable name or provide a default name
+			const snippet = `console.log('${variableName} :${currentLine}', ${variableName});\n`;
+			const insertionPosition = new vscode.Position(currentLine + 1, 0);
 
-				editor.edit(editBuilder => {
-					editBuilder.insert(insertionPosition, snippet);
-				}).then(() => {
-					console.log("Log Added Successfully");
-				}).catch(err => {
-					vscode.window.showErrorMessage(`Error: ${err}`);
-				});
+			editor.edit(editBuilder => {
+				editBuilder.insert(insertionPosition, snippet);
+			}).then(() => {
+				console.log("Log Added Successfully");
+			}).catch(err => {
+				vscode.window.showErrorMessage(`Error: ${err}`);
+			});
 			return;
-		}
-
-		// Find the last occurrence of '}' or '};' below the cursor position
-		let objectEndLine = -1;
-		for (let i = currentLine + 1; i <= lastLine; i++) {
-			const lineText = document.lineAt(i).text.trim();
-			if (lineText === '}' || lineText === '};') {
-				objectEndLine = i;
-				break;
+		} else {
+			// Find the last occurrence of '}' or '};' below the cursor position
+			let objectEndLine = -1;
+			for (let i = currentLine + 1; i <= lastLine; i++) {
+				const lineText = document.lineAt(i).text.trim();
+				if(document.lineAt(currentLine).text.trim().endsWith('{')){
+					if (lineText === '}' || lineText === '};') {
+						objectEndLine = i;
+						break;
+					}
+				}else{
+					objectEndLine=currentLine;
+					break;
+				}
+				
 			}
+
+			const currentLineText = document.lineAt(currentLine).text.trim();
+			const match = currentLineText.match(/\b(const|let|var|function)\s+([\w$]+)/);
+			if (!match) {
+				vscode.window.showErrorMessage("No variable or function declaration found at cursor position.");
+				return;
+			}
+
+			const variableName = match[2];
+			const isFunction = match[1] === "function";
+			const functionEnable = isFunction ? '()' : '';
+
+			let snippet = `console.log('${variableName} :${currentLine}', ${variableName}${functionEnable});\n`;
+
+			// Check if a console.log statement already exists for the variable or function
+			// const existingLogLine = findExistingLogLine(document, variableName);
+			// if (existingLogLine !== -1) {
+			// 	vscode.window.showInformationMessage(`A console.log statement already exists for '${variableName}'.`);
+			// 	return;
+			// }
+
+			if (!isFunction && objectEndLine !== -1) {
+				snippet = `console.log('${variableName} :${currentLine}', ${variableName});\n`;
+			}
+			// Find the end of the current function block
+			const functionEndLine = findFunctionEndLine(document, cursorPosition.line) + 1;
+			// console.log("Check Log", functionEndLine, objectEndLine, cursorPosition.line)
+			const insertionPosition = new vscode.Position(isFunction ? functionEndLine + 1 : objectEndLine + 1, 0);
+
+			editor.edit(editBuilder => {
+				editBuilder.insert(insertionPosition, `${snippet}`);
+			}).then(() => {
+				console.log("Log Added Successfully");
+
+			}).catch(err => {
+				vscode.window.showErrorMessage(`Error: ${err}`);
+			});
 		}
 
-		const currentLineText = document.lineAt(currentLine).text.trim();
-		const match = currentLineText.match(/\b(const|let|var|function)\s+([\w$]+)/);
-		if (!match) {
-			vscode.window.showErrorMessage("No variable or function declaration found at cursor position.");
-			return;
-		}
 
-		const variableName = match[2];
-		const isFunction = match[1] === "function";
-		const functionEnable = isFunction ? '()' : '';
-
-		let snippet = `console.log('${variableName} :${currentLine}', ${variableName}${functionEnable});\n`;
-
-		// Check if a console.log statement already exists for the variable or function
-		// const existingLogLine = findExistingLogLine(document, variableName);
-		// if (existingLogLine !== -1) {
-		// 	vscode.window.showInformationMessage(`A console.log statement already exists for '${variableName}'.`);
-		// 	return;
-		// }
-
-		if (!isFunction && objectEndLine !== -1) {
-			snippet = `console.log('${variableName} :${currentLine}', ${variableName});\n`;
-		}
-		// Find the end of the current function block
-		const functionEndLine = findFunctionEndLine(document, cursorPosition.line) + 1;
-		console.log("Check Log", functionEndLine, objectEndLine, cursorPosition.line)
-		const insertionPosition = new vscode.Position(isFunction ? functionEndLine + 1 : objectEndLine + 1, 0);
-
-		editor.edit(editBuilder => {
-			editBuilder.insert(insertionPosition, `${snippet}`);
-		}).then(() => {
-			console.log("Log Added Successfully");
-
-		}).catch(err => {
-			vscode.window.showErrorMessage(`Error: ${err}`);
-		});
 	}
 	// This Function helps to find a log existing line 
 	// function findExistingLogLine(document, variableName) {
