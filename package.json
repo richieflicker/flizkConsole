@@ -2,9 +2,9 @@
   "name": "flizkconsole",
   "displayName": "flizkConsole",
   "description": "",
-  "version": "0.0.9",
+  "version": "0.1.",
   "pricing": "Free",
-  "icon": "images/flizk.jpg",
+  "icon": "images/flizk.png",
   "repository": "https://github.com/richieflicker/flizkConsole", 
   "engines": {
     "vscode": "^1.75.0"
