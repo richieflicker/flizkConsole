@@ -1,64 +1,62 @@
-# flizkConsole - Your Ultimate Console Log Management Tool
+# flizkConsole - Elevate Your Debugging Experience
 
 ![flizkConsole Banner](https://i.ibb.co/h220GMx/flizk-banner.jpg)
 
-## Overview
+## Navigate Debugging Chaos with Ease
 
-Do you find yourself lost in a labyrinth of `console.log` statements while debugging your colossal projects? We've all been there! The more we rely on these logs, the harder it gets to keep track of them. Say hello to flizkConsole, your new debugging sidekick designed to restore order to your codebase chaos.
+Tired of navigating a maze of scattered `console.log` statements while debugging your mammoth projects? Fret not! Enter flizkConsole – your ultimate ally in restoring order amidst the codebase chaos.
 
-## How to Use
+## Effortless Debugging with Keyboard Shortcuts
 
-flizkConsole comes with a handy collection of keyboard shortcuts, elevating your debugging prowess:
+Harness the power of flizkConsole's intuitive keyboard shortcuts to streamline your debugging prowess:
 
-**CTRL + ALT + L (Windows) or OPTION + CTRL + L (Mac)**: Declare Console for JavaScript, TypeScript, TSX, and PHP (Laravel) files.
+- **CTRL + ALT + L (Windows) | OPTION + CTRL + L (Mac)**: Declare Console in JavaScript, TypeScript, TSX, and PHP (Laravel) files.
 
-![Tips to add Console Statement](https://i.ibb.co/sqGpQ7R/c01.gif)
+![Add Console Statement](https://i.ibb.co/sqGpQ7R/c01.gif)
 
-**CTRL + ALT + C (Windows) or OPTION + CTRL + C (Mac)**: Comment your selected `console.log` statement.
+- **CTRL + ALT + C (Windows) | OPTION + CTRL + C (Mac)**: Comment selected `console.log` statements.
 
-![Tips to add Comment Console Statement](https://i.ibb.co/x11G1gp/c02.gif)
+![Comment Console Statement](https://i.ibb.co/x11G1gp/c02.gif)
 
-**CTRL + ALT + Z (Windows) or OPTION + CTRL + Z (Mac)**: Unleash the power of uncommenting a previously commented `console.log` statement.
+- **CTRL + ALT + Z (Windows) | OPTION + CTRL + Z (Mac)**: Unleash the power of uncommenting previously commented `console.log` statements.
 
-![Tips to Remove Comment From Console Statement](https://i.ibb.co/5cZ0KfW/c03.gif)
+![Remove Comment From Console Statement](https://i.ibb.co/5cZ0KfW/c03.gif)
 
-**CTRL + ALT + D (Windows) or OPTION + CTRL + D (Mac)**: Swiftly remove comments from your JavaScript, TypeScript, or TSX files.
+- **CTRL + ALT + D (Windows) | OPTION + CTRL + D (Mac)**: Swiftly eliminate comments from JavaScript, TypeScript, or TSX files.
 
-![Tips to Delete Console Statement](https://i.ibb.co/0mz53Rz/c04.gif)
+![Delete Console Statement](https://i.ibb.co/0mz53Rz/c04.gif)
 
-## Features at a Glance
+## Features at Your Fingertips
 
-- **Seamless Debugging**: Effortlessly manage and organize your `console.log` statements for crystal-clear code understanding.
+- **Effortless Debugging**: Seamlessly manage and organize your `console.log` statements for pristine code comprehension.
 
-- **Stay Updated with Releases**:
-  - **0.1.6**:
-    - Enhanced Console Future.
+- **Stay Ahead with Updates**:
+  - **0.1.9**:
+    - Unveiling Enhanced Console Future.
 
   - **0.0.9**:
-    - Test out our shiny new feature that allows you to remove console logs from JavaScript files (Note: Visual removal only) - **ON BETA**.
-    - Enhanced Console Comment and Uncomment functionality.
+    - Embrace our innovative feature allowing removal of console logs from JavaScript files (Note: Visual removal only) - **ON BETA**.
+    - Amplified Console Comment and Uncomment functionality.
   
   - **0.0.8**:
-    - Say hello to support for TSX files – your versatile teammate.
+    - Welcome support for TSX files – your versatile companion.
 
   - **0.0.7**:
-    - Experience the magic of commenting and uncommenting console log statements with ease.
+    - Experience the magic of seamless commenting and uncommenting of console log statements.
 
   - **0.0.6**:
-    - We've jazzed up key bindings for an even smoother workflow.
+    - Revamped key bindings for an even smoother workflow.
 
   - **0.0.5**:
-    - Our initial release, packed with essentials.
-    - Keep your seatbelts fastened for upcoming features, including console log deletion.
+    - Our maiden release, brimming with essentials.
+    - Buckle up for upcoming features, including console log deletion.
 
-## Installation
+## Seamless Installation
 
-Want to embark on your flizkConsole journey? Simply visit the [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=flizk.flizk-console) and hit the install button. You're just a click away from smarter debugging.
+Ready to embark on your flizkConsole journey? A world of smarter debugging awaits you in the [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=flizk.flizk-console). A single click is all it takes to revolutionize your debugging experience.
 
+## Seeking Guidance?
 
+Queries or suggestions? Reach out to [Richie Flicker](https://www.linkedin.com/in/richie-flicker-879828139/) on LinkedIn.
 
-## Need Assistance?
-
-Questions or suggestions? Feel free to get in touch with [Richie Flicker](https://www.linkedin.com/in/richie-flicker-879828139/) on LinkedIn.
-
-**Experience seamless debugging with flizkConsole. Happy coding!**
+**Embrace the Art of Seamless Debugging with flizkConsole. Happy Coding!**
