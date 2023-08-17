@@ -1,10 +1,23 @@
 # flizkConsole - Your Ultimate Console Log Management Tool
 
-![flizkConsole Banner](https://ibb.co/c22qWvK)
+![flizkConsole Banner](https://i.ibb.co/h220GMx/flizk-banner.jpg)
 
 ## Overview
 
 Do you find yourself lost in a labyrinth of `console.log` statements while debugging your colossal projects? We've all been there! The more we rely on these logs, the harder it gets to keep track of them. Say hello to flizkConsole, your new debugging sidekick designed to restore order to your codebase chaos.
+
+## How to Use
+
+flizkConsole comes with a handy collection of keyboard shortcuts, elevating your debugging prowess:
+
+**CTRL + ALT + L (Windows) or OPTION + CTRL + L (Mac)**: Declare Console for JavaScript, TypeScript, TSX, and PHP (Laravel) files.
+![flizkConsole Banner](https://i.ibb.co/pd86Zqw/c01.gif)
+**CTRL + ALT + C (Windows) or OPTION + CTRL + C (Mac)**: Comment your selected `console.log` statement.
+![flizkConsole Banner](https://i.ibb.co/Jvv2vpf/c02.gif)
+**CTRL + ALT + Z (Windows) or OPTION + CTRL + Z (Mac)**: Unleash the power of uncommenting a previously commented `console.log` statement.
+![flizkConsole Banner](https://i.ibb.co/cTqBY7c/c03.gif)
+**CTRL + ALT + D (Windows) or OPTION + CTRL + D (Mac)**: Swiftly remove comments from your JavaScript, TypeScript, or TSX files.
+![flizkConsole Banner](https://i.ibb.co/7j0hFd0/c04.gif)
 
 ## Features at a Glance
 
@@ -35,14 +48,7 @@ Do you find yourself lost in a labyrinth of `console.log` statements while debug
 
 Want to embark on your flizkConsole journey? Simply visit the [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=flizk.flizk-console) and hit the install button. You're just a click away from smarter debugging.
 
-## How to Use
 
-flizkConsole comes with a handy collection of keyboard shortcuts, elevating your debugging prowess:
-
-- **ctrl+alt+l**: Declare Console for JavaScript, TypeScript, TSX, and PHP (Laravel) files.
-- **ctrl+alt+c**: Comment your selected `console.log` statement.
-- **ctrl+alt+z**: Unleash the power of uncommenting a previously commented `console.log` statement.
-- **ctrl+alt+d**: Swiftly remove comments from your JavaScript, TypeScript, or TSX files.
 
 ## Need Assistance?
 

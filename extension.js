@@ -249,10 +249,12 @@ function activate(context) {
 			if (!isFunction && objectEndLine !== -1) {
 				snippet = `console.log('${variableName} :${currentLine}', ${variableName});\n`;
 			}
+			if(objectEndLine===-1){
+				objectEndLine=cursorPosition.line+1
+			}
 			// Find the end of the current function block
 			const functionEndLine = findFunctionEndLine(document, cursorPosition.line) + 1;
-			// console.log("Check Log", functionEndLine, objectEndLine, cursorPosition.line)
-			const insertionPosition = new vscode.Position(isFunction ? functionEndLine + 1 : objectEndLine + 1, 0);
+			const insertionPosition = new vscode.Position(isFunction ? functionEndLine : objectEndLine + 1, 0);
 
 			editor.edit(editBuilder => {
 				editBuilder.insert(insertionPosition, `${snippet}`);
