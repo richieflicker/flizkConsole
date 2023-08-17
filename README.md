@@ -11,12 +11,19 @@ Do you find yourself lost in a labyrinth of `console.log` statements while debug
 flizkConsole comes with a handy collection of keyboard shortcuts, elevating your debugging prowess:
 
 **CTRL + ALT + L (Windows) or OPTION + CTRL + L (Mac)**: Declare Console for JavaScript, TypeScript, TSX, and PHP (Laravel) files.
+
 ![flizkConsole Banner](https://i.ibb.co/pd86Zqw/c01.gif)
+
 **CTRL + ALT + C (Windows) or OPTION + CTRL + C (Mac)**: Comment your selected `console.log` statement.
+
 ![flizkConsole Banner](https://i.ibb.co/Jvv2vpf/c02.gif)
+
 **CTRL + ALT + Z (Windows) or OPTION + CTRL + Z (Mac)**: Unleash the power of uncommenting a previously commented `console.log` statement.
+
 ![flizkConsole Banner](https://i.ibb.co/cTqBY7c/c03.gif)
+
 **CTRL + ALT + D (Windows) or OPTION + CTRL + D (Mac)**: Swiftly remove comments from your JavaScript, TypeScript, or TSX files.
+
 ![flizkConsole Banner](https://i.ibb.co/7j0hFd0/c04.gif)
 
 ## Features at a Glance
