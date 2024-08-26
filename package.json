@@ -2,7 +2,7 @@
   "name": "flizkconsole",
   "displayName": "flizkConsole - Elevate Your Debugging Experience",
   "description": "Simplify your debugging process and regain code clarity with flizkConsole, a powerful Visual Studio Code extension. Easily manage, organize, and optimize console.log statements in JavaScript, TypeScript, and TSX files. Unlock streamlined debugging with intuitive keyboard shortcuts and stay up-to-date with enhanced features. Try flizkConsole today for smarter, more efficient development.",
-  "version": "0.1.10",
+  "version": "0.2.0",
   "pricing": "Free",
   "icon": "images/flizk.png",
   "repository": {
@@ -25,23 +25,28 @@
   "main": "./extension.js",
   "contributes": {
     "command": "runCommands",
-    "commands": [{
-      "command": "displayLogMessage",
-      "title": "Display Log Message"
-      },{
+    "commands": [
+      {
+        "command": "displayLogMessage",
+        "title": "Display Log Message"
+      },
+      {
         "command": "commentLogMessage",
         "title": "Comment Log Message"
-        },{
-          "command": "uncommentLogMessage",
-          "title": "Uncomment Log Message"
-        },{
-          "command": "removeLogMessage",
-          "title": "Remove Log Message"
-        }],
+      },
+      {
+        "command": "uncommentLogMessage",
+        "title": "Uncomment Log Message"
+      },
+      {
+        "command": "removeLogMessage",
+        "title": "Remove Log Message"
+      }
+    ],
     "keybindings": [
       {
         "when": "editorTextFocus",
-      "command": "flizkConsole.displayLogMessage",
+        "command": "flizkConsole.displayLogMessage",
         "key": "ctrl+alt+l",
         "mac": "ctrl+alt+l"
       },
