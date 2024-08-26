@@ -37,7 +37,7 @@ function activate(context) {
 		// // console.log(editor.document.getText())
 		let language = editor.document.languageId;
 		// console.log(`The current document's language is ${language}`);
-		if (language == "typescript" || language == "typescriptreact" || language == "javascript") {
+		if (language == "typescript" || language == "typescriptreact" || language == "javascript" || language=="javascriptreact") {
 
 			consoleLog()
 			// vscode.window.showInformationMessage('Added Log from flizkConsole! ', selectedText);
@@ -66,7 +66,7 @@ function activate(context) {
 	vscode.commands.registerCommand('flizkConsole.removeLogMessage', function () {
 		const editor = vscode.window.activeTextEditor;
 		let language = editor.document.languageId;
-		if (language == "typescript" || language == "typescriptreact" || language == "javascript") {
+		if (language == "typescript" || language == "typescriptreact" || language == "javascript" || language=="javascriptreact") {
 			commentConsoleLog(true)
 		}
 	})
@@ -75,7 +75,7 @@ function activate(context) {
 		const editor = vscode.window.activeTextEditor;
 		let language = editor.document.languageId;
 		// console.log(`The current document's language is ${language}`);
-		if (language == "typescript" || language == "typescriptreact" || language == "javascript") {
+		if (language == "typescript" || language == "typescriptreact" || language == "javascript" || language=="javascriptreact") {
 			uncommentConsoleLog()
 			vscode.window.showInformationMessage('uncommented console.log from flizkConsole! ');
 
