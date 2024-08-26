@@ -55,7 +55,7 @@ function activate(context) {
 		const editor = vscode.window.activeTextEditor;
 		let language = editor.document.languageId;
 		// console.log(`The current document's language is ${language}`);
-		if (language == "typescript" || language == "typescriptreact" || language == "javascript") {
+		if (language == "typescript" || language == "typescriptreact" || language == "javascript" || language=="javascriptreact") {
 			commentConsoleLog()
 		} else if (language == "php") {
 

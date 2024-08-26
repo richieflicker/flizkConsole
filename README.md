@@ -57,6 +57,6 @@ Ready to embark on your flizkConsole journey? A world of smarter debugging await
 
 ## Seeking Guidance?
 
-Queries or suggestions? Reach out to [Richie Flicker](https://www.linkedin.com/in/richie-flicker-879828139/) on LinkedIn.
+Queries or suggestions? Reach out to [Richie Flicker](https://www.linkedin.com/in/richie-flicker/) on LinkedIn.
 
 **Embrace the Art of Seamless Debugging with flizkConsole. Happy Coding!**
