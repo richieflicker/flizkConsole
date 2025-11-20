@@ -3,6 +3,9 @@
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 
+// Output channel for detailed logging
+let outputChannel;
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 
@@ -11,9 +14,56 @@ const vscode = require('vscode');
  */
 function activate(context) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "flizkconsole" is now active!');
+	// Create output channel for detailed logging
+	outputChannel = vscode.window.createOutputChannel('flizkConsole');
+	outputChannel.appendLine('flizkConsole extension activated');
+
+	// Helper function to show status messages based on configuration
+	function showStatusMessage(message, type = 'info') {
+		const config = vscode.workspace.getConfiguration('flizkConsole');
+		const showMessages = config.get('showStatusMessages', true);
+		
+		if (showMessages) {
+			if (type === 'info') {
+				vscode.window.showInformationMessage(message);
+			} else if (type === 'warning') {
+				vscode.window.showWarningMessage(message);
+			} else if (type === 'error') {
+				vscode.window.showErrorMessage(message);
+			}
+		}
+		
+		// Always log to output channel
+		outputChannel.appendLine(`[${type.toUpperCase()}] ${message}`);
+	}
+
+	// Helper function to get log template
+	function getLogTemplate(variableName, lineNumber) {
+		const config = vscode.workspace.getConfiguration('flizkConsole');
+		const logFormat = config.get('logFormat', 'simple');
+		const includeTimestamp = config.get('includeTimestamp', false);
+		const customTemplate = config.get('logTemplate', '${variableName} :${lineNumber}');
+		
+		let template;
+		
+		if (logFormat === 'custom') {
+			template = customTemplate;
+		} else if (logFormat === 'detailed') {
+			template = includeTimestamp 
+				? `[${new Date().toISOString()}] ${variableName} (line ${lineNumber})`
+				: `${variableName} (line ${lineNumber})`;
+		} else { // simple
+			template = includeTimestamp
+				? `[${new Date().toISOString()}] ${variableName} :${lineNumber}`
+				: `${variableName} :${lineNumber}`;
+		}
+		
+		// Replace template variables
+		return template
+			.replace(/\${variableName}/g, variableName)
+			.replace(/\${lineNumber}/g, lineNumber)
+			.replace(/\${timestamp}/g, new Date().toISOString());
+	}
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with  registerCommand
@@ -65,11 +115,21 @@ function activate(context) {
 	});
 	vscode.commands.registerCommand('flizkConsole.removeLogMessage', function () {
 		const editor = vscode.window.activeTextEditor;
-		let language = editor.document.languageId;
-		if (language == "typescript" || language == "typescriptreact" || language == "javascript" || language=="javascriptreact") {
-			commentConsoleLog(true)
+		
+		if (!editor) {
+			showStatusMessage('No active editor found. Please open a file first.', 'error');
+			return;
 		}
-	})
+		
+		let language = editor.document.languageId;
+		outputChannel.appendLine(`Processing removeLogMessage for language: ${language}`);
+		
+		if (language == "typescript" || language == "typescriptreact" || language == "javascript" || language=="javascriptreact") {
+			commentConsoleLog(true);
+		} else {
+			showStatusMessage(`Console log removal is not supported for ${language} files.`, 'warning');
+		}
+	});
 	vscode.commands.registerCommand('flizkConsole.uncommentLogMessage', function () {
 		// The code you place here will be executed every time your command is executed
 		const editor = vscode.window.activeTextEditor;
@@ -91,7 +151,7 @@ function activate(context) {
 		let editor = vscode.window.activeTextEditor;
 
 		if (!editor) {
-			vscode.window.showErrorMessage("Editor Does Not Exist");
+			showStatusMessage('No active editor found.', 'error');
 			return;
 		}
 
@@ -100,13 +160,19 @@ function activate(context) {
 
 		// Create an array to hold the edited lines
 		let editedLines = [];
+		let uncommentedCount = 0;
 
 		for (let i = visibleRange.start.line; i <= visibleRange.end.line; i++) {
 			let line = editor.document.lineAt(i);
 			let newText = line.text;
+			const originalText = newText;
+			
 			// Check if the line is commented and contains a commented console.log statement
 			if ((newText.trim().startsWith("//") || newText.trim().startsWith("/*") || newText.trim().startsWith("#")) && regex.test(newText)) {
 				newText = newText.replace(regex, "console.log($1$2$3);"); // Uncomment the console.log statement
+				if (newText !== originalText) {
+					uncommentedCount++;
+				}
 			}
 
 			editedLines.push(newText);
@@ -118,16 +184,21 @@ function activate(context) {
 				editBuilder.replace(editor.document.lineAt(i).range, editedLines[i - visibleRange.start.line]);
 			}
 		}).then(() => {
-			vscode.window.showInformationMessage('Uncommented console.log statements in visible text.');
+			if (uncommentedCount > 0) {
+				showStatusMessage(`Uncommented ${uncommentedCount} console.log statement(s) in visible area.`);
+			} else {
+				showStatusMessage('No commented console.log statements found in visible area.', 'warning');
+			}
 		}).catch(err => {
-			console.error(err);
+			outputChannel.appendLine(`Error uncommenting console.log: ${err.message}`);
+			showStatusMessage(`Failed to uncomment console.log statements: ${err.message}`, 'error');
 		});
 	}
 	function commentConsoleLog(removeLogs = false) {
 		let editor = vscode.window.activeTextEditor;
 
 		if (!editor) {
-			vscode.window.showErrorMessage("Editor Does Not Exist");
+			showStatusMessage('No active editor found.', 'error');
 			return;
 		}
 
@@ -139,10 +210,12 @@ function activate(context) {
 
 		// Create an array to hold the edited lines
 		let editedLines = [];
+		let actionCount = 0;
 
 		for (let i = visibleRange.start.line; i <= visibleRange.end.line; i++) {
 			let line = editor.document.lineAt(i);
 			let newText = line.text;
+			const originalText = newText;
 
 			// Check if the line is not already commented and contains a console.log statement
 			if (!removeLogs) {
@@ -151,6 +224,7 @@ function activate(context) {
 					for (const match of matches) {
 						const replacement = `// ${match}`;
 						newText = newText.replace(match, replacement);
+						actionCount++;
 					}
 				}
 			} else {
@@ -158,8 +232,14 @@ function activate(context) {
 				// Remove the entire console.log statement including possible trailing );
 				if (matches && !newText.trim().startsWith("//")) {
 					newText = newText.replace(regex, "").replace(/\);?/g, "");
+					if (newText !== originalText) {
+						actionCount++;
+					}
 				} else if (newText.trim().startsWith("//")) {
 					newText = newText.replace(regex, "").replace(/\);?/g, "");
+					if (newText !== originalText) {
+						actionCount++;
+					}
 				}
 			}
 
@@ -172,9 +252,16 @@ function activate(context) {
 				editBuilder.replace(editor.document.lineAt(i).range, editedLines[i - visibleRange.start.line]);
 			}
 		}).then(() => {
-			vscode.window.showInformationMessage('Updated console.log statements in visible text.');
+			if (actionCount > 0) {
+				const action = removeLogs ? 'removed' : 'commented';
+				showStatusMessage(`${actionCount} console.log statement(s) ${action} in visible area.`);
+			} else {
+				const action = removeLogs ? 'remove' : 'comment';
+				showStatusMessage(`No console.log statements found to ${action} in visible area.`, 'warning');
+			}
 		}).catch(err => {
-			console.error(err);
+			outputChannel.appendLine(`Error ${removeLogs ? 'removing' : 'commenting'} console.log: ${err.message}`);
+			showStatusMessage(`Failed to ${removeLogs ? 'remove' : 'comment'} console.log statements: ${err.message}`, 'error');
 		});
 	}
 
@@ -183,7 +270,7 @@ function activate(context) {
 		const editor = vscode.window.activeTextEditor;
 
 		if (!editor) {
-			vscode.window.showErrorMessage("Editor Does Not Exist");
+			showStatusMessage('No active editor found.', 'error');
 			return;
 		}
 
@@ -195,18 +282,21 @@ function activate(context) {
 		const selection = editor.selection;
 		const selectedText = document.getText(selection);
 		if (selectedText) {
-			console.log(selectedText, 'Text')
+			outputChannel.appendLine(`Selected text: ${selectedText}`);
 			// Find the end of the current function block
-			const variableName = selectedText || 'variableName'; // Use selected text as variable name or provide a default name
-			const snippet = `console.log('${variableName} :${currentLine}', ${variableName});\n`;
+			const variableName = selectedText.trim() || 'variableName'; // Use selected text as variable name or provide a default name
+			const logLabel = getLogTemplate(variableName, currentLine + 1);
+			const snippet = `console.log('${logLabel}', ${variableName});\n`;
 			const insertionPosition = new vscode.Position(currentLine + 1, 0);
 
 			editor.edit(editBuilder => {
 				editBuilder.insert(insertionPosition, snippet);
 			}).then(() => {
-				console.log("Log Added Successfully");
+				showStatusMessage(`Console log added for "${variableName}"`);
+				outputChannel.appendLine(`Log added successfully for variable: ${variableName}`);
 			}).catch(err => {
-				vscode.window.showErrorMessage(`Error: ${err}`);
+				outputChannel.appendLine(`Error adding log: ${err.message}`);
+				showStatusMessage(`Failed to add console log: ${err.message}`, 'error');
 			});
 			return;
 		} else {
@@ -229,7 +319,7 @@ function activate(context) {
 			const currentLineText = document.lineAt(currentLine).text.trim();
 			const match = currentLineText.match(/\b(const|let|var|function)\s+([\w$]+)/);
 			if (!match) {
-				vscode.window.showErrorMessage("No variable or function declaration found at cursor position.");
+				showStatusMessage('No variable or function declaration found at cursor position. Please place your cursor on a variable or function declaration, or select text to log.', 'warning');
 				return;
 			}
 
@@ -237,32 +327,26 @@ function activate(context) {
 			const isFunction = match[1] === "function";
 			const functionEnable = isFunction ? '()' : '';
 
-			let snippet = `console.log('${variableName} :${currentLine}', ${variableName}${functionEnable});\n`;
-
-			// Check if a console.log statement already exists for the variable or function
-			// const existingLogLine = findExistingLogLine(document, variableName);
-			// if (existingLogLine !== -1) {
-			// 	vscode.window.showInformationMessage(`A console.log statement already exists for '${variableName}'.`);
-			// 	return;
-			// }
-
-			if (!isFunction && objectEndLine !== -1) {
-				snippet = `console.log('${variableName} :${currentLine}', ${variableName});\n`;
-			}
 			if(objectEndLine===-1){
 				objectEndLine=cursorPosition.line+1
 			}
 			// Find the end of the current function block
-			const functionEndLine = findFunctionEndLine(document, cursorPosition.line) + 1;
-			const insertionPosition = new vscode.Position(isFunction ? functionEndLine : objectEndLine + 1, 0);
+			const functionEndLine = findFunctionEndLine(document, cursorPosition.line);
+			const insertionLine = isFunction ? (functionEndLine !== undefined ? functionEndLine + 1 : currentLine + 1) : objectEndLine + 1;
+			const logLabel = getLogTemplate(variableName, insertionLine);
+			
+			let snippet = `console.log('${logLabel}', ${variableName}${functionEnable});\n`;
+
+			const insertionPosition = new vscode.Position(insertionLine, 0);
 
 			editor.edit(editBuilder => {
 				editBuilder.insert(insertionPosition, `${snippet}`);
 			}).then(() => {
-				console.log("Log Added Successfully");
-
+				showStatusMessage(`Console log added for "${variableName}"`);
+				outputChannel.appendLine(`Log added successfully for ${isFunction ? 'function' : 'variable'}: ${variableName} at line ${insertionLine}`);
 			}).catch(err => {
-				vscode.window.showErrorMessage(`Error: ${err}`);
+				outputChannel.appendLine(`Error adding log: ${err.message}`);
+				showStatusMessage(`Failed to add console log: ${err.message}`, 'error');
 			});
 		}
 
@@ -301,13 +385,39 @@ function activate(context) {
 
 
 	function consoleLogPhp() {
-		vscode.commands.executeCommand("editor.action.insertLineAfter");
-		vscode.commands.executeCommand("editor.action.insertSnippet", { "snippet": "\Log::info('${CLIPBOARD} :${TM_LINE_INDEX} '.${CLIPBOARD} $1)$2;" });
+		const editor = vscode.window.activeTextEditor;
+		if (!editor) {
+			showStatusMessage('No active editor found.', 'error');
+			return;
+		}
+		
+		const cursorPosition = editor.selection.active;
+		const currentLine = cursorPosition.line;
+		const selection = editor.selection;
+		const selectedText = editor.document.getText(selection);
+		const variableName = selectedText.trim() || 'variable';
+		const logLabel = getLogTemplate(variableName, currentLine + 1);
+		
+		vscode.commands.executeCommand("editor.action.insertLineAfter").then(() => {
+			vscode.commands.executeCommand("editor.action.insertSnippet", { 
+				"snippet": `Log::info('${logLabel} '.${variableName} $1)$2;` 
+			}).then(() => {
+				showStatusMessage(`PHP log added for "${variableName}"`);
+				outputChannel.appendLine(`PHP log added successfully for: ${variableName}`);
+			}).catch(err => {
+				outputChannel.appendLine(`Error adding PHP log: ${err.message}`);
+				showStatusMessage(`Failed to add PHP log: ${err.message}`, 'error');
+			});
+		}).catch(err => {
+			outputChannel.appendLine(`Error inserting line: ${err.message}`);
+			showStatusMessage(`Failed to add PHP log: ${err.message}`, 'error');
+		});
 	}
 
 
 
 	context.subscriptions.push(disposable);
+	context.subscriptions.push(outputChannel);
 }
 
 // This method is called when your extension is deactivated

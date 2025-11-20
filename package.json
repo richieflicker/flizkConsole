@@ -48,27 +48,53 @@
         "when": "editorTextFocus",
         "command": "flizkConsole.displayLogMessage",
         "key": "ctrl+alt+l",
-        "mac": "ctrl+alt+l"
+        "mac": "cmd+alt+l"
       },
       {
         "when": "editorTextFocus",
         "command": "flizkConsole.commentLogMessage",
         "key": "ctrl+alt+c",
-        "mac": "ctrl+alt+c"
+        "mac": "cmd+alt+c"
       },
       {
         "when": "editorTextFocus",
         "command": "flizkConsole.uncommentLogMessage",
         "key": "ctrl+alt+z",
-        "mac": "ctrl+alt+z"
+        "mac": "cmd+alt+z"
       },
       {
         "when": "editorTextFocus",
         "command": "flizkConsole.removeLogMessage",
         "key": "ctrl+alt+d",
-        "mac": "ctrl+alt+d"
+        "mac": "cmd+alt+d"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "flizkConsole",
+      "properties": {
+        "flizkConsole.showStatusMessages": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show status messages when console.log statements are added, commented, or removed."
+        },
+        "flizkConsole.logTemplate": {
+          "type": "string",
+          "default": "${variableName} :${lineNumber}",
+          "description": "Template for console.log statements. Available variables: ${variableName}, ${lineNumber}, ${timestamp}"
+        },
+        "flizkConsole.includeTimestamp": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include timestamp in console.log statements."
+        },
+        "flizkConsole.logFormat": {
+          "type": "string",
+          "enum": ["simple", "detailed", "custom"],
+          "default": "simple",
+          "description": "Log format style. 'simple' uses variable name and line number, 'detailed' includes more context, 'custom' uses the logTemplate setting."
+        }
+      }
+    }
   },
   "scripts": {
     "lint": "eslint .",
